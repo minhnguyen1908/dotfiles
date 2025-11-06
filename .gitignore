@@ -6,7 +6,15 @@
 
 # Un-ignore specific directories
 !/nvim/
+!/nvim/**
 !/nushell/
+!/nushell/**
 !/tmux/
+!/tmux/**
 !/ghostty/
+!/ghostty/**
 !starship.toml
+
+# Ignore junk files
+.DS_Store
+history.txt
