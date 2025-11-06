@@ -24,13 +24,3 @@ const carapace_cache = ($nu.cache-dir | path join "carapace.nu")
 mkdir ($nu.cache-dir)
 carapace _carapace nushell | save --force $carapace_cache
 source $carapace_cache
-
-# --- 6. Activate Starship Prompt (THE FIX) ---
-# This is the modern, correct way to set the prompt
-# and hide the welcome banner.
-let-env config = ($env.config | merge {
-    show_banner: false, # This hides the welcome message
-    render: {
-        prompt_command: { || starship prompt } # This sets Starship as the prompt
-    }
-})
