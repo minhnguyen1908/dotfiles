@@ -14,7 +14,6 @@ $env.PATH = ($env.PATH | prepend "/opt/homebrew/bin" | prepend "/opt/homebrew/sb
 source ($nu.config-path | path dirname | path join "themes" | path join "catppuccin_macchiato.nu")
 
 # --- 4. Load Custom Toolboxes ---
-# (We can add these back when you're ready)
 # use scripts/g2trade-logs.nu *
 # use scripts/server-logs.nu *
 # use scripts/websocket.nu *
