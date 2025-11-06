@@ -1,25 +1,35 @@
-# config.nu
-#
-# Installed by:
-# version = "0.108.0"
-#
-# This file is used to override default Nushell settings, define
-# (or import) custom commands, or run any other startup tasks.
-# See https://www.nushell.sh/book/configuration.html
-#
-# Nushell sets "sensible defaults" for most configuration settings, 
-# so your `config.nu` only needs to override these defaults if desired.
-#
-# You can open this file in your default editor using:
-#     config nu
-#
-# You can also pretty-print and page through the documentation for configuration
-# options using:
-#     config nu --doc | nu-highlight | less -R
+# === My Nushell Config ===
 
-$env.VISUAL = "nvim"
-$env.EDITOR = "nvim"
+# --- 1. Load Standard Library ---
+# MUST be at the top. This fixes "unknown command: mkdir/path"
+use std *
 
-# ${UserConfigDir}/nushell/config.nu
-source $"($nu.cache-dir)/carapace.nu"
-source ($nu.config-path | path dirname | path join "themes/macchiato.nu")
+# --- 2. Setup PATH Environment ---
+# We moved this from env.nu. Now it works.
+$env.PATH = ($env.PATH | prepend "/opt/homebrew/bin" | prepend "/opt/homebrew/sbin")
+
+# --- 3. Load Catppuccin COLORS ---
+# This is NOT the prompt. This gives 'ls' its pretty colors.
+source ($nu.config-path | path dirname | path join "themes" | path join "macchiato.nu")
+
+# --- 4. Load Custom Toolboxes ---
+# (We can add these back when you're ready)
+# use scripts/g2trade-logs.nu *
+# use scripts/server-logs.nu *
+# use scripts/websocket.nu *
+
+# --- 5. Setup Carapace Completions ---
+# We moved these commands from env.nu.
+const carapace_cache = ($nu.cache-dir | path join "carapace.nu")
+mkdir ($nu.cache-dir)
+carapace _carapace nushell | save --force $carapace_cache
+source $carapace_cache
+
+# --- 6. Setup Starship Prompt (THE FIX) ---
+# First, tell Starship where to find your config file
+# We'll point it to the starship.toml from your dotfiles
+let starship_config_path = ($nu.config-path | path dirname | path join "../starship.toml")
+$env.STARSHIP_CONFIG = $starship_config_path
+
+# Second, tell Nushell to USE Starship as the prompt
+use starship
