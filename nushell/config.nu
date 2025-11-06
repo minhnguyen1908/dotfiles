@@ -31,5 +31,7 @@ source $carapace_cache
 let starship_config_path = ($nu.config-path | path dirname | path join "../starship.toml")
 $env.STARSHIP_CONFIG = $starship_config_path
 
-# Second, tell Nushell to USE Starship as the prompt
-use starship
+# --- 7. Activate Starship Prompt ---
+# This is the "on switch" that tells Nushell
+# to use 'starship' to render the prompt.
+$env.PROMPT_COMMAND = { || starship prompt }
