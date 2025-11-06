@@ -26,6 +26,11 @@ carapace _carapace nushell | save --force $carapace_cache
 source $carapace_cache
 
 # --- 6. Activate Starship Prompt (THE FIX) ---
-# This line will finally work because $env.PATH is set
-# and Starship will find your ~/.config/starship.toml
-$env.PROMPT_COMMAND = { || starship prompt }
+# This is the modern, correct way to set the prompt
+# and hide the welcome banner.
+let-env config = ($env.config | merge {
+    show_banner: false, # This hides the welcome message
+    render: {
+        prompt_command: { || starship prompt } # This sets Starship as the prompt
+    }
+})
