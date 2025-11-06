@@ -1,0 +1,11 @@
+# Ignore everything by default
+*
+
+# But UN-ignore the .gitignore file itself
+!.gitignore
+
+# Un-ignore specific directories
+!/nvim/
+!/nushell/
+!/tmux/
+!/ghostty/
