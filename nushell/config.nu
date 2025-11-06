@@ -6,11 +6,12 @@ use std *
 
 # --- 2. Setup PATH Environment ---
 # We moved this from env.nu. Now it works.
+# This is what lets us find 'starship' and 'carapace'
 $env.PATH = ($env.PATH | prepend "/opt/homebrew/bin" | prepend "/opt/homebrew/sbin")
 
 # --- 3. Load Catppuccin COLORS ---
-# This is NOT the prompt. This gives 'ls' its pretty colors.
-source ($nu.config-path | path dirname | path join "themes" | path join "macchiato.nu")
+# This gives 'ls' its pretty colors.
+source ($nu.config-path | path dirname | path join "themes" | path join "catppuccin_macchiato.nu")
 
 # --- 4. Load Custom Toolboxes ---
 # (We can add these back when you're ready)
@@ -25,13 +26,7 @@ mkdir ($nu.cache-dir)
 carapace _carapace nushell | save --force $carapace_cache
 source $carapace_cache
 
-# --- 6. Setup Starship Prompt (THE FIX) ---
-# First, tell Starship where to find your config file
-# We'll point it to the starship.toml from your dotfiles
-let starship_config_path = ($nu.config-path | path dirname | path join "../starship.toml")
-$env.STARSHIP_CONFIG = $starship_config_path
-
-# --- 7. Activate Starship Prompt ---
-# This is the "on switch" that tells Nushell
-# to use 'starship' to render the prompt.
+# --- 6. Activate Starship Prompt (THE FIX) ---
+# This line will finally work because $env.PATH is set
+# and Starship will find your ~/.config/starship.toml
 $env.PROMPT_COMMAND = { || starship prompt }
