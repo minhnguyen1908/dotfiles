@@ -19,6 +19,7 @@ return {
 			"marksman",
 			"sqlls",
 			"typescript_language_server",
+			"texlab",
 		},
 	},
 }
