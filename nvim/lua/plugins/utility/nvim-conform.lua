@@ -26,6 +26,9 @@ return {
 				-- Format your SQL files with sql-formatter on save
 				sql = { "sql-formatter" },
 
+				-- Go files
+				go = { "goimports-reviser", "gofumpt" },
+
 				-- For XML, we can use xmllint (if installed)
 				xml = { "xmllint" },
 

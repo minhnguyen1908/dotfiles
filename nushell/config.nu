@@ -1,26 +1,37 @@
-# === My Nushell Config ===
-
-# --- 1. Load Standard Library ---
-# MUST be at the top. This fixes "unknown command: mkdir/path"
 use std *
 
-# --- 2. Setup PATH Environment ---
-# We moved this from env.nu. Now it works.
-# This is what lets us find 'starship' and 'carapace'
+use scripts/chech_g3sb_log.nu *
+
 $env.PATH = ($env.PATH | prepend "/opt/homebrew/bin" | prepend "/opt/homebrew/sbin")
-
-# --- 3. Load Catppuccin COLORS ---
-# This gives 'ls' its pretty colors.
-source ($nu.config-path | path dirname | path join "themes" | path join "catppuccin_macchiato.nu")
-
-# --- 4. Load Custom Toolboxes ---
-# use scripts/g2trade-logs.nu *
-# use scripts/server-logs.nu *
-# use scripts/websocket.nu *
-
-# --- 5. Setup Carapace Completions ---
-# We moved these commands from env.nu.
+$env.PATH = ($env.PATH | prepend "/opt/homebrew/opt/libpq/bin")
 const carapace_cache = ($nu.cache-dir | path join "carapace.nu")
 mkdir ($nu.cache-dir)
 carapace _carapace nushell | save --force $carapace_cache
 source $carapace_cache
+
+$env.config = {
+    show_banner: false
+
+    edit_mode: "vi"
+
+    completions: {
+        external: {
+            enable: true
+            max_results: 100
+            completer: {|spans|
+                carapace $spans.0 nushell ...$spans | from json
+            }
+        }
+    }
+
+    ls: {
+            use_ls_colors: true
+            clickable_links: false
+        }
+}
+
+zoxide init nushell | save -f ($nu.default-config-dir | path join "zoxide.nu")
+source ($nu.default-config-dir | path join "zoxide.nu")
+
+atuin init nu | save -f ($nu.default-config-dir | path join "atuin.nu")
+source ($nu.default-config-dir | path join "atuin.nu")

@@ -20,6 +20,7 @@ return {
 			"sqlls",
 			"typescript_language_server",
 			"texlab",
+			"gopls",
 		},
 	},
 }
