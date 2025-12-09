@@ -17,6 +17,11 @@ return {
 					command = "xmllint",
 					args = { "--format", "-" },
 				},
+				packer_fmt = {
+					command = "packer",
+					args = { "fmt", "-" },
+					stdin = true,
+				},
 			},
 			-- This section sets up a filetype and the formatters to use for it
 			formatters_by_ft = {
@@ -36,6 +41,11 @@ return {
 				javascript = { "prettier" },
 				yaml = { "prettier" },
 				json = { "prettier" },
+
+				-- Add support for Packer HCL files
+				hcl = { "packer_fmt" },
+				terraform = { "terraform_fmt" },
+				["packer"] = { "packer_fmt" },
 			},
 			-- This section sets up the formatting trigger
 			format_on_save = {

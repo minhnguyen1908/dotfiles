@@ -6,8 +6,10 @@ return {
 	config = function()
 		require("nvim-treesitter.configs").setup({
 			ensure_installed = {
+				"c",
 				"regex",
 				"lua",
+				"luadoc",
 				"python",
 				"javascript",
 				"typescript",
@@ -16,8 +18,15 @@ return {
 				"json",
 				"yaml",
 				"markdown",
+				"markdown_inline",
 				"bash",
 				"sql",
+				"go",
+				"hcl",
+				"terraform",
+				"vim",
+				"vimdoc",
+				"query",
 			}, -- List of languages to install parsers for.
 			auto_install = true, -- Automatically install missing parsers when entering buffer.
 			highlight = { enable = true }, -- Enable syntax highlighting.

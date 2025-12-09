@@ -21,6 +21,7 @@ return {
 			"typescript_language_server",
 			"texlab",
 			"gopls",
+			"terraform",
 		},
 	},
 }
