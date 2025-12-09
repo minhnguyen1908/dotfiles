@@ -32,8 +32,5 @@ return {
 			highlight = { enable = true }, -- Enable syntax highlighting.
 			indent = { enable = true }, -- Enable smart indentation.
 		})
-		vim.treesitter.language.register("sql", "dadbod-sql-query")
-		vim.treesitter.language.register("sql", "dbui-query") -- Older convention
-		vim.treesitter.language.register("sql", "plsql")
 	end,
 }
