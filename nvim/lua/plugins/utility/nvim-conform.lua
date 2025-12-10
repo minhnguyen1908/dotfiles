@@ -52,7 +52,7 @@ return {
 				-- Set 'lsp_fallback' to true to use the LSP formatter if no conform formatter is found
 				lsp_fallback = true,
 				async = false, -- Synchronous formatting, which is more reliable
-				timeout_ms = 1000,
+				timeout_ms = 3000,
 			},
 		})
 	end,
