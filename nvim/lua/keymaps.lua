@@ -1,22 +1,14 @@
 -- File: lua/keymaps.lua
 
 local map = vim.keymap.set
+local fzf = require("fzf-lua")
 
 -- [[ Basic Mappings ]]
 map("n", "<leader>w", ":w<CR>", { desc = "Save file" })
 map("n", "<leader>q", ":q<CR>", { desc = "Quit Neovim" })
 map("n", "<leader>Q", ":q!<CR>", { desc = "Force Quit Neovim (discard changes)" })
 map("n", "<leader>x", ":wq<CR>", { desc = "Save and Quit" })
-map("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
---vim.keymap.set({ "t", "i" }, "<A-h>", "<C-\\><C-n><C-w>h", { desc = "Move to left window" })
---vim.keymap.set({ "t", "i" }, "<A-j>", "<C-\\><C-n><C-w>j", { desc = "Move to down window" })
---vim.keymap.set({ "t", "i" }, "<A-k>", "<C-\\><C-n><C-w>k", { desc = "Move to up window" })
---vim.keymap.set({ "t", "i" }, "<A-l>", "<C-\\><C-n><C-w>l", { desc = "Move to right window" })
---vim.keymap.set("n", "<A-h>", "<C-w>h", { desc = "Move to left window" })
---vim.keymap.set("n", "<A-j>", "<C-w>j", { desc = "Move to down window" })
---vim.keymap.set("n", "<A-k>", "<C-w>k", { desc = "Move to up window" })
---vim.keymap.set("n", "<A-l>", "<C-w>l", { desc = "Move to right window" })
-vim.keymap.set("n", "<leader>pl", "o<C-r>+<Esc>", { desc = "Paste system clipboard to new line below" })
+map("n", "<leader>pl", "o<C-r>+<Esc>", { desc = "Paste system clipboard to new line below" })
 
 -- =============================================================================
 -- CENTRALIZED PLUGIN KEYMAPS
@@ -45,9 +37,6 @@ map("n", "<leader>gh", ":DiffviewFile<CR>", { desc = "Diffview: Open Current Fil
 map("n", "<leader>gl", ":DiffviewLog<CR>", { desc = "Diffview: Open Git Log Diff" })
 map("n", "<leader>gq", ":DiffviewClose<CR>", { desc = "Diffview: Close Diffview" })
 
--- --- Plugin: toggleterm.nvim ---
-map({ "n", "t" }, "<leader>tt", "<cmd>ToggleTerm<CR>", { desc = "Toggle Terminal" })
-
 -- --- Plugin: gemini.nvim ---
 map("n", "<leader>gg", "<cmd>GeminiChat<CR>", { desc = "Gemini: Open chat" })
 map("v", "<leader>ge", ":<C-u>GeminiCodeExplain<CR>", { desc = "Gemini: Explain code" })
@@ -56,11 +45,10 @@ map("v", "<leader>gt", ":<C-u>GeminiUnitTest<CR>", { desc = "Gemini: Generate un
 
 -- --- Plugin: nerdcommenter ---
 -- Using the improved version of the keymap we discussed
-map({ "n", "v" }, "<leader>c ", "<cmd>NERDCommenterToggle<CR>", { desc = "NerdCommenter: Toggle comment" })
-map("n", "<leader>cc", "<cmd>NERDCommenterComment<CR>", { desc = "NerdCommenter: Add comment" })
+--map({ "n", "v" }, "<leader>c<space>", "<cmd>NERDCommenterToggle<CR>", { desc = "NerdCommenter: Toggle comment" })
+--map("n", "<leader>cc", "<cmd>NERDCommenterComment<CR>", { desc = "NerdCommenter: Add comment" })
 
 -- --- Plugin: telescope.nvim ---
-local fzf = require("fzf-lua")
 map("n", "<leader>ff", fzf.files, { desc = "FZF: Find Files" })
 map("n", "<leader>fb", fzf.buffers, { desc = "FZF: Find Buffers" })
 map("n", "<leader>fg", fzf.live_grep, { desc = "FZF: Live Grep (text)" })

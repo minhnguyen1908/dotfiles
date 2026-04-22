@@ -7,9 +7,14 @@ return {
 		vim.o.timeoutlen = 300
 	end,
 	config = function()
-		require("which-key").setup({
+		local wk = require("which-key")
+		wk.setup({
 			-- Your configuration can go here, or you can leave it empty
 			-- to use the default settings, which are excellent.
+		})
+
+		wk.add({
+			{ "<leader>c", group = "Code/Comment" },
 		})
 	end,
 }
