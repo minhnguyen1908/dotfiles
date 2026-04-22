@@ -60,12 +60,20 @@ vim.opt.splitright = true -- Open new vertical splits to the right of the curren
 vim.opt.splitbelow = true -- Open new horizontal splits below the current window.
 
 -- Folding for text/code blocks based on indentation.
-vim.opt.foldenable = true
-vim.opt.foldmethod = "manual"
---vim.api.nvim_create_autocmd({ "FileType" }, {
---pattern = "markdown",
---command = "setlocal foldmethod=indent",
---})
+-- Use Treesitter's intelligence to handle code folding
+vim.opt.foldmethod = "expr"
+
+-- This tells Neovim to use the built-in Treesitter engine (new in 0.12!)
+-- to decide where a function or a block of code begins and ends.
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+
+-- '99' effectively means "open everything by default."
+-- Without this, Neovim might hide all your code the moment you open a file.
+vim.opt.foldlevel = 99
+
+-- This ensures that even when you search for text,
+-- Neovim will automatically open a fold if the result is inside it.
+vim.opt.foldlevelstart = 99
 
 -- Create the undo directory if it does not exist.
 local undodir = vim.o.undodir
