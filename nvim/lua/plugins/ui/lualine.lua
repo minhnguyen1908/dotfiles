@@ -5,17 +5,17 @@ return {
 	dependencies = { "nvim-tree/nvim-web-devicons" }, -- For filetype icons in the statusline
 	config = function()
 		local status_ok, _ = pcall(require, "catppuccin")
-		local lualine_theme = "dracula"
+		local lualine_theme = "auto"
 
 		if status_ok then
-			lualine_theme = "catppuccin"
+			lualine_theme = "catppuccin-macchiato"
 		end
 		require("lualine").setup({
 			options = {
 				icons_enabled = true,
 				theme = lualine_theme, -- 'auto' or try 'onedark', 'material', 'tokyonight', etc.
-				component_separators = { left = "?", right = "?" }, -- Aesthetic separators
-				section_separators = { left = "?", right = "?" }, -- Aesthetic separators
+				component_separators = { left = "", right = "" }, -- Aesthetic separators
+				section_separators = { left = "", right = "" }, -- Aesthetic separators
 				disabled_filetypes = {
 					statusline = {},
 					winbar = {},
