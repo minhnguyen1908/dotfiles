@@ -9,6 +9,13 @@ map("n", "<leader>q", ":q<CR>", { desc = "Quit Neovim" })
 map("n", "<leader>Q", ":q!<CR>", { desc = "Force Quit Neovim (discard changes)" })
 map("n", "<leader>x", ":wq<CR>", { desc = "Save and Quit" })
 map("n", "<leader>pl", "o<C-r>+<Esc>", { desc = "Paste system clipboard to new line below" })
+map("n", "<A-j>", ":m .+1<CR>==", { desc = "Move line down" })
+map("n", "<A-k>", ":m .-2<CR>==", { desc = "Move line up" })
+map("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
+map("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
+
+map("v", "<", "<gv", { desc = "Indent left and reselect" })
+map("v", ">", ">gv", { desc = "Indent right and reselect" })
 
 -- =============================================================================
 -- CENTRALIZED PLUGIN KEYMAPS
@@ -71,7 +78,7 @@ map("i", "<C-l>", function()
 end, { noremap = true, silent = true, desc = "Copilot: Accept suggestion" })
 
 -- --- Plugin: conform.nvim ---
-vim.keymap.set({ "n", "v" }, "<leader>cf", function()
+map({ "n", "v" }, "<leader>cf", function()
 	require("conform").format({ async = true, lsp_fallback = true })
 end, { desc = "Format File" })
 
