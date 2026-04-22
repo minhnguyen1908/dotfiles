@@ -45,7 +45,7 @@ map("v", "<leader>gt", ":<C-u>GeminiUnitTest<CR>", { desc = "Gemini: Generate un
 
 -- --- Plugin: nerdcommenter ---
 -- Using the improved version of the keymap we discussed
---map({ "n", "v" }, "<leader>c<space>", "<cmd>NERDCommenterToggle<CR>", { desc = "NerdCommenter: Toggle comment" })
+map({ "n", "v" }, "<leader>c ", "<cmd>NERDCommenterToggle<CR>", { desc = "NerdCommenter: Toggle comment" })
 --map("n", "<leader>cc", "<cmd>NERDCommenterComment<CR>", { desc = "NerdCommenter: Add comment" })
 
 -- --- Plugin: telescope.nvim ---
