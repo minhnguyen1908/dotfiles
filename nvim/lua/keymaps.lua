@@ -60,13 +60,19 @@ map({ "n", "v" }, "<leader>c ", "<cmd>NERDCommenterToggle<CR>", { desc = "NerdCo
 map("n", "<leader>cc", "<cmd>NERDCommenterComment<CR>", { desc = "NerdCommenter: Add comment" })
 
 -- --- Plugin: telescope.nvim ---
-map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Telescope: Find Files" })
-map("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { desc = "Telescope: Find Buffers" })
-map("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { desc = "Telescope: Live Grep (text)" })
-map("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { desc = "Telescope: Search Help" })
-map("n", "<leader>fG", "<cmd>Telescope git_files<cr>", { desc = "Telescope: Git Files" })
-map("n", "<leader>fc", "<cmd>Telescope git_commits<cr>", { desc = "Telescope: Git Commits" })
-map("n", "<leader>ts", "<cmd>Telescope lsp_document_symbols<cr>", { desc = "Telescope: LSP Document Symbols" })
+local fzf = require("fzf-lua")
+map("n", "<leader>ff", fzf.files, { desc = "FZF: Find Files" })
+map("n", "<leader>fb", fzf.buffers, { desc = "FZF: Find Buffers" })
+map("n", "<leader>fg", fzf.live_grep, { desc = "FZF: Live Grep (text)" })
+map("n", "<leader>fh", fzf.help_tags, { desc = "FZF: Search Help" })
+map("n", "<leader>fG", fzf.git_files, { desc = "FZF: Git Files" })
+map("n", "<leader>fc", fzf.git_commits, { desc = "FZF: Git Commits" })
+map("n", "<leader>ts", fzf.lsp_document_symbols, { desc = "FZF: LSP Document Symbols" })
+map("n", "<leader>fl", function()
+	fzf.grep({ search = "ERROR|WARN" })
+end, { desc = "FZF: Quick Log Triage" })
+-- Add this to your FZF section in lua/keymaps.lua
+map("n", "<leader>fz", fzf.blines, { desc = "FZF: Search in current file" })
 
 -- --- Plugin: vim-mundo ---
 map("n", "<leader>u", "<cmd>MundoShow<CR>", { desc = "Open Undo Tree (Mundo)" })
