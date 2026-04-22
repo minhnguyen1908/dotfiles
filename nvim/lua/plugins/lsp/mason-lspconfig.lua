@@ -18,10 +18,10 @@ return {
 			"cssls",
 			"marksman",
 			"sqlls",
-			"typescript_language_server",
+			"ts_ls",
 			"texlab",
 			"gopls",
-			"terraform",
+			"terraformls",
 		},
 	},
 }

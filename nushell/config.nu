@@ -2,8 +2,6 @@ use std *
 
 use scripts/chech_g3sb_log.nu *
 
-$env.PATH = ($env.PATH | prepend "/opt/homebrew/bin" | prepend "/opt/homebrew/sbin")
-$env.PATH = ($env.PATH | prepend "/opt/homebrew/opt/libpq/bin")
 const carapace_cache = ($nu.cache-dir | path join "carapace.nu")
 mkdir ($nu.cache-dir)
 carapace _carapace nushell | save --force $carapace_cache
@@ -35,3 +33,5 @@ source ($nu.default-config-dir | path join "zoxide.nu")
 
 atuin init nu | save -f ($nu.default-config-dir | path join "atuin.nu")
 source ($nu.default-config-dir | path join "atuin.nu")
+
+alias nerdctl = lima nerdctl
