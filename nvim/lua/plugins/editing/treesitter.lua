@@ -1,15 +1,31 @@
 -- File: nvim/lua/plugins/editing/treesitter.lua
--- PLUGIN 1: nvim-treesitter for intelligent syntax highlighting and indentation.
--- This uses a parsing engine for more accurate and robust highlighting than traditional regex.
-return {
-	"nvim-treesitter/nvim-treesitter",
-	build = ":TSUpdate", -- Command to run after installation to download language parsers.
-	config = function()
-		-- We use the configs module to handle the setup call
-		local configs = require("nvim-treesitter.configs")
+-- PLUGIN: nvim-treesitter
+-- LOGIC: Provides high-performance syntax highlighting and indentation.
 
-		configs.setup({
-			-- Line-by-line: List of languages to install parsers for.
+return {
+	"nvim-treesitter/nvim-treesitter", -- Core plugin repository
+	build = ":TSUpdate", -- Logic: Automatically updates parsers on plugin update
+	config = function() -- Initialization logic
+		-- 1. Standard Parser Configuration
+
+		-- UPDATED: We define a custom class 'ParserConfig' to satisfy Lua-LS strictness.
+		-- This logic prevents the 'Fields cannot be injected' warning in image_d4df7e.jpg.
+		---@class ParserConfig
+		local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+
+		-- NEW: Injecting the official OpenSCAD repository into our verified class.
+		-- Logic: Pointing to the live repo we confirmed earlier.
+		parser_config.openscad = {
+			install_info = {
+				url = "https://github.com/openscad/tree-sitter-openscad", -- The source URL
+				files = { "src/parser.c" }, -- The C-source file to compile
+				branch = "main", -- The default git branch to pull from
+			},
+		}
+
+		-- 2. Standard Treesitter Setup
+		-- Logic: Configuring the core engine and ensuring our DevOps stack is installed.
+		require("nvim-treesitter.configs").setup({
 			ensure_installed = {
 				"c",
 				"regex",
@@ -28,21 +44,21 @@ return {
 				"sql",
 				"go",
 				"hcl",
-				"terraform",
+				"terraform", -- CRITICAL: Vital for your AWS SAA studies
 				"vim",
 				"vimdoc",
 				"query",
-				"openscad", -- New: Added for your 3D blueprint workflow
+				"openscad", -- NEW: Added to auto-management list
 			},
-			sync_install = false, -- New: Explicitly set to false to satisfy type checker warnings
-			ignore_install = {}, -- New: Explicitly provided empty table for the type checker
-			auto_install = true, -- Automatically install missing parsers when entering buffer.
+			sync_install = false, -- Logic: Prevent blocking the UI during installs
+			ignore_install = {}, -- Logic: Exclude specific parsers if needed
+			auto_install = true, -- Logic: Silently install missing parsers on file open
 			highlight = {
-				enable = true, -- Enable syntax highlighting.
-				additional_vim_regex_highlighting = false, -- New: Set to false for better performance
+				enable = true, -- Logic: Turn on intelligent highlighting
+				additional_vim_regex_highlighting = false, -- Logic: Disable old regex engine for speed
 			},
-			indent = { enable = true }, -- Enable smart indentation.
-			modules = {}, -- New: Explicitly provided empty table for 'modules' requirement
+			indent = { enable = true }, -- Logic: Enable tree-based indentation
+			modules = {}, -- Placeholder for additional modules
 		})
 	end,
 }

@@ -22,7 +22,7 @@ return {
 			"texlab",
 			"gopls",
 			"terraformls",
-			"openscad_ls",
+			"openscad_lsp",
 		},
 	},
 }
