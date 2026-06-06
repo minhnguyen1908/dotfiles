@@ -55,11 +55,6 @@ map("v", "<leader>ge", ":<C-u>GeminiCodeExplain<CR>", { desc = "Gemini: Explain 
 map("v", "<leader>gr", ":<C-u>GeminiCodeReview<CR>", { desc = "Gemini: Code review" })
 map("v", "<leader>gt", ":<C-u>GeminiUnitTest<CR>", { desc = "Gemini: Generate unit tests" })
 
--- --- [NEW UPDATED SECTION] Plugin: Native Core Commenter Controls ---
--- We leverage Neovim's 0.12 native engine using 'remap = true' to fire built-in routines
-map("n", "<leader>cc", "gcc", { remap = true, desc = "Comment: Toggle Active Line" })
-map("v", "<leader>c", "gc", { remap = true, desc = "Comment: Toggle Selected Block" })
-
 -- --- Plugin: fzf-lua ---
 map("n", "<leader>ff", fzf.files, { desc = "FZF: Find Files" })
 map("n", "<leader>fb", fzf.buffers, { desc = "FZF: Find Buffers" })
