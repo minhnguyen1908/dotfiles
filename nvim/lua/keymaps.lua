@@ -1,24 +1,29 @@
--- File: lua/keymaps.lua
+-- =============================================================================
+-- CENTRALIZED MASTER KEYMAP ARCHITECTURE (Neovim 0.12+ Core Alignment)
+-- =============================================================================
 
-local map = vim.keymap.set
-local fzf = require("fzf-lua")
+local map = vim.keymap.set -- Cache core keymap function pointer for execution efficiency
+local fzf = require("fzf-lua") -- Cache your primary mouse-less search engine orchestration
 
--- [[ Basic Mappings ]]
-map("n", "<leader>w", ":w<CR>", { desc = "Save file" })
-map("n", "<leader>q", ":q<CR>", { desc = "Quit Neovim" })
-map("n", "<leader>Q", ":q!<CR>", { desc = "Force Quit Neovim (discard changes)" })
-map("n", "<leader>x", ":wq<CR>", { desc = "Save and Quit" })
-map("n", "<leader>pl", "o<C-r>+<Esc>", { desc = "Paste system clipboard to new line below" })
-map("n", "<A-j>", ":m .+1<CR>==", { desc = "Move line down" })
-map("n", "<A-k>", ":m .-2<CR>==", { desc = "Move line up" })
-map("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
-map("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
+-- --- [[ Basic Operational Mappings ]] ---
+map("n", "<leader>w", ":w<CR>", { desc = "Save file" }) -- Flush active buffer frames straight to storage disk
+map("n", "<leader>q", ":q<CR>", { desc = "Quit Neovim" }) -- Safe shutdown request pipeline
+map("n", "<leader>Q", ":q!<CR>", { desc = "Force Quit Neovim (discard changes)" }) -- Emergency drop ignoring modifications
+map("n", "<leader>x", ":wq<CR>", { desc = "Save and Quit" }) -- Atomically serialize data changes and exit
+map("n", "<leader>pl", "o<C-r>+<Esc>", { desc = "Paste system clipboard to new line below" }) -- Clean system memory insertion macro
 
-map("v", "<", "<gv", { desc = "Indent left and reselect" })
-map("v", ">", ">gv", { desc = "Indent right and reselect" })
+-- --- [[ Line Transposition Engine ]] ---
+map("n", "<A-j>", ":m .+1<CR>==", { desc = "Move line down" }) -- Shift line down and recalibrate indentation
+map("n", "<A-k>", ":m .-2<CR>==", { desc = "Move line up" }) -- Shift line up and recalibrate indentation
+map("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" }) -- Shift visual selection down safely
+map("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" }) -- Shift visual selection up safely
+
+-- --- [[ Visual Block Indentation Controls ]] ---
+map("v", "<", "<gv", { desc = "Indent left and reselect" }) -- Shift blocks left and lock focus for consecutive shifts
+map("v", ">", ">gv", { desc = "Indent right and reselect" }) -- Shift blocks right and lock focus for consecutive shifts
 
 -- =============================================================================
--- CENTRALIZED PLUGIN KEYMAPS
+-- [[ CORE INTEGRATED PLUGIN MAP MATRIX ]]
 -- =============================================================================
 
 -- --- Plugin: neo-tree.nvim ---
@@ -50,12 +55,12 @@ map("v", "<leader>ge", ":<C-u>GeminiCodeExplain<CR>", { desc = "Gemini: Explain 
 map("v", "<leader>gr", ":<C-u>GeminiCodeReview<CR>", { desc = "Gemini: Code review" })
 map("v", "<leader>gt", ":<C-u>GeminiUnitTest<CR>", { desc = "Gemini: Generate unit tests" })
 
--- --- Plugin: nerdcommenter ---
--- Using the improved version of the keymap we discussed
--- map({ "n", "v" }, "<leader>c ", "<cmd>NERDCommenterToggle<CR>", { desc = "NerdCommenter: Toggle comment" })
---map("n", "<leader>cc", "<cmd>NERDCommenterComment<CR>", { desc = "NerdCommenter: Add comment" })
+-- --- [NEW UPDATED SECTION] Plugin: Native Core Commenter Controls ---
+-- We leverage Neovim's 0.12 native engine using 'remap = true' to fire built-in routines
+map("n", "<leader>cc", "gcc", { remap = true, desc = "Comment: Toggle Active Line" })
+map("v", "<leader>c", "gc", { remap = true, desc = "Comment: Toggle Selected Block" })
 
--- --- Plugin: telescope.nvim ---
+-- --- Plugin: fzf-lua ---
 map("n", "<leader>ff", fzf.files, { desc = "FZF: Find Files" })
 map("n", "<leader>fb", fzf.buffers, { desc = "FZF: Find Buffers" })
 map("n", "<leader>fg", fzf.live_grep, { desc = "FZF: Live Grep (text)" })
@@ -66,7 +71,6 @@ map("n", "<leader>ts", fzf.lsp_document_symbols, { desc = "FZF: LSP Document Sym
 map("n", "<leader>fl", function()
 	fzf.grep({ search = "ERROR|WARN" })
 end, { desc = "FZF: Quick Log Triage" })
--- Add this to your FZF section in lua/keymaps.lua
 map("n", "<leader>fz", fzf.blines, { desc = "FZF: Search in current file" })
 
 -- --- Plugin: vim-mundo ---
@@ -82,7 +86,7 @@ map({ "n", "v" }, "<leader>cf", function()
 	require("conform").format({ async = true, lsp_fallback = true })
 end, { desc = "Format File" })
 
--- nvim-dap keymaps
+-- --- Plugin: nvim-dap ---
 map("n", "<F5>", function()
 	require("dap").continue()
 end, { desc = "Dap: Continue" })
@@ -119,8 +123,9 @@ end, { desc = "Dap: Show Frames" })
 map("n", "<leader>ds", function()
 	require("dap.ui.widgets").centered_float(require("dap.ui.widgets").scopes)
 end, { desc = "Dap: Show Scopes" })
+
 -- =============================================================================
--- LSP KEYMAPS (This part remains the same)
+-- [[ CORE NATIVE LSP BUFFER-ATTACH KEYMAP LAYER ]]
 -- =============================================================================
 return function(client, bufnr)
 	local lsp_map = function(mode, lhs, rhs, opts)
@@ -128,7 +133,7 @@ return function(client, bufnr)
 		opts.buffer = bufnr
 		map(mode, lhs, rhs, opts)
 	end
-	-- ... (the rest of your LSP keymaps function is unchanged)
+
 	vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", { buf = bufnr })
 	lsp_map("n", "gd", vim.lsp.buf.definition, { desc = "Go to Definition" })
 	lsp_map("n", "K", vim.lsp.buf.hover, { desc = "Hover Info" })
@@ -136,12 +141,15 @@ return function(client, bufnr)
 	lsp_map("n", "gr", vim.lsp.buf.references, { desc = "Show References" })
 	lsp_map("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename Symbol" })
 	lsp_map("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
+
+	-- Diagnostic Coordinates Navigation
 	lsp_map("n", "[d", function()
 		vim.diagnostic.jump({ count = -1 })
 	end, { desc = "Previous Diagnostic" })
 	lsp_map("n", "]d", function()
 		vim.diagnostic.jump({ count = 1 })
 	end, { desc = "Next Diagnostic" })
+
 	local diagnostic_severity = vim.diagnostic.severity
 	lsp_map("n", "[e", function()
 		vim.diagnostic.jump({ count = -1, severity = diagnostic_severity.ERROR })
@@ -155,6 +163,8 @@ return function(client, bufnr)
 	lsp_map("n", "]w", function()
 		vim.diagnostic.jump({ count = 1, severity = diagnostic_severity.WARN })
 	end, { desc = "Next WARNING Diagnostic" })
+
+	-- Diagnostic Interface Pools List
 	lsp_map("n", "<leader>le", function()
 		vim.diagnostic.setloclist({ severity = diagnostic_severity.ERROR })
 	end, { desc = "Quickfix List with ERRORs" })
