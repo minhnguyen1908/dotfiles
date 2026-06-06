@@ -126,9 +126,9 @@ map("n", "<leader>ds", function()
 	require("dap.ui.widgets").centered_float(require("dap.ui.widgets").scopes)
 end, { desc = "Dap: Show Scopes" })
 
--- -----------------------------------------------------------------------------
+-- =============================================================================
 -- [[ SECTION 3: BUFFER INTERCEPT LSP HOOKS ]]
--- -----------------------------------------------------------------------------
+-- =============================================================================
 return function(client, bufnr)
 	local lsp_map = function(mode, lhs, rhs, opts)
 		opts = opts or {}
@@ -136,18 +136,17 @@ return function(client, bufnr)
 		map(mode, lhs, rhs, opts)
 	end
 
-	-- Wire core autocomplete menu functions to active server instances
+	-- Connect core autocomplete options directly to the active server instance
 	vim.api.nvim_set_option_value("omnifunc", "v:lua.vim.lsp.omnifunc", { buf = bufnr })
 
-	-- Navigation Vectors
+	-- We keep these as fallback explicit anchors or descriptions
 	lsp_map("n", "gd", vim.lsp.buf.definition, { desc = "Go to Definition" })
 	lsp_map("n", "K", vim.lsp.buf.hover, { desc = "Hover Info" })
-	lsp_map("n", "gi", vim.lsp.buf.implementation, { desc = "Go to Implementation" })
-	lsp_map("n", "gr", vim.lsp.buf.references, { desc = "Show References" })
-	lsp_map("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename Symbol" })
-	lsp_map("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
 
-	-- Structural Error Diagnostics Navigation
+	-- !!! LOOK BUDDY: WE DELETED gi, gr, <leader>rn, AND <leader>ca FROM HERE !!!
+	-- Neovim 0.12 automatically maps them to gri, grr, grn, and gra natively!
+
+	-- --- Structural Error Diagnostics Navigation ---
 	lsp_map("n", "[d", function()
 		vim.diagnostic.jump({ count = -1 })
 	end, { desc = "Previous Diagnostic" })
