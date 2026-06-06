@@ -1,135 +1,117 @@
--- Copilot settings
+-- ==========================================================================
+-- NEOVIM ARCHITECTURAL CORE INITIALIZATION (Modern 2026 Engine Alignment)
+-- ==========================================================================
+
+-- --- AI & Copilot Foundations ---
+-- Disable default Tab maps for GitHub Copilot so we can assign custom triggers
 vim.g.copilot_no_tab_map = true
 
--- Set python provider
+-- Bind your explicit isolated Python virtualenv path for provider plugins
 vim.g.python3_host_prog = vim.fn.expand("~/.pyenv/versions/neovim3/bin/python")
 
--- Set <space> as the leader key.
--- The leader key is a prefix for custom keybindings and many plugins.
--- NOTE: This must happen before plugins are loaded (otherwise wrong leader will be used).
--- See `:help mapleader` for more information.
+-- --- Keymap Leader Layer ---
+-- Define your operational prefix keys. MUST be initialized before loading plugins!
 vim.g.mapleader = " "
-vim.g.maplocalleader = " " -- Also set localleader, useful for buffer-specific maps.
+vim.g.maplocalleader = " " -- Safe fallback for local/buffer-specific bindings
 
--- [[ Setting global Neovim options ]]
--- These options control Neovim's behavior, appearance, and core functionality.
--- See `:help option-list` for a full list, and `:help 'optionname'` for individual option docs.
+-- ==========================================================================
+-- [[ GLOBAL REGULAR OPTIONS MATRIX ]]
+-- ==========================================================================
 
-vim.o.number = true -- Print the line number in front of each line.
-vim.o.relativenumber = true -- Use relative line numbers, which makes jumping with `j` and `k` much easier.
--- This will affect the 'number' option, see `:h number_relativenumber`.
+-- Line Numbering Controls
+vim.o.number = true -- Display absolute coordinates for current line
+vim.o.relativenumber = true -- Enable relative numbers to speed up rapid "j"/"k" vertical jumps
 
-vim.o.termguicolors = true -- Enable true colors (24-bit RGB) in the terminal if supported.
--- Essential for most modern colorschemes to display correctly.
+-- Graphical Window Rules
+vim.o.termguicolors = true -- Assert true 24-bit RGB canvas colors matching Ghostty theme styles
+vim.o.wrap = false -- Disable line wrapping to protect clean structure across long files
+vim.o.cursorline = true -- Color-highlight the line where the cursor rests
+vim.o.scrolloff = 10 -- Keep at least 10 lines visible above/below cursor when scrolling
+vim.o.list = true -- Render invisible helper chars (tabs, trailing whitespaces)
+vim.o.mouse = "a" -- Keep multi-mode mouse pointer active for rapid pane/window adjustments
 
-vim.o.expandtab = true -- Use spaces instead of tabs when you press the Tab key.
-vim.o.tabstop = 4 -- Set the visual width of a tab character to 4 spaces.
-vim.o.shiftwidth = 4 -- Set the number of spaces for indentation (e.g., when using `>>` or `==`).
-vim.o.autoindent = true -- Automatically indent new lines to match the previous line's indentation.
-vim.o.smartindent = true -- Smarter auto-indentation specifically for programming languages.
+-- Spacing & Tabulation Standards (4-Space DevOps Baseline)
+vim.o.expandtab = true -- Automatically swap raw tab characters out for spaces
+vim.o.tabstop = 4 -- Set visual width of a hard tab to 4 spaces
+vim.o.shiftwidth = 4 -- Space count used when shifting blocks using commands like '>>' or '<<'
+vim.o.autoindent = true -- Copy the precise indentation from the previous line on newlines
+vim.o.smartindent = true -- Enable syntactic language-aware auto-indentation
 
-vim.o.mouse = "a" -- Enable mouse support in all modes ('a' means all modes).
--- Optional, but can be helpful for beginners or for quick window resizing.
+-- Pattern Searching Mechanics
+vim.o.hlsearch = true -- Color-highlight all matches discovered during search loops
+vim.o.incsearch = true -- Incrementally jump to prospective search matches as you type
+vim.o.ignorecase = true -- Disregard letter-casing inside query items
+vim.o.smartcase = true -- Override ignorecase automatically if query includes uppercase characters
 
-vim.o.wrap = false -- Do not wrap lines. Lines will extend horizontally.
--- Generally preferred for code and configuration files.
+-- Session Persistence & Buffer Recovery
+vim.o.confirm = true -- Request a popup modal instead of failing if files have unsaved modifications
+vim.o.undofile = true -- Activate persistent multi-session undo trees across editor boots
+vim.o.undodir = vim.fn.stdpath("data") .. "/undodir" -- Store persistent undo paths
 
-vim.o.hlsearch = true -- Highlight all matches when searching.
-vim.o.incsearch = true -- Show partial matches as you type your search query (incremental search).
+-- Split Management Layouts
+vim.opt.splitright = true -- Force new vertical splits to open to the right
+vim.opt.splitbelow = true -- Force new horizontal splits to open directly below
 
-vim.o.ignorecase = true -- Ignore case when searching (`/pattern` matches 'Pattern', 'pattern').
-vim.o.smartcase = true -- Don't ignore case if your search pattern contains uppercase characters.
--- E.g., `/foo` matches 'Foo', 'foo'; but `/Foo` only matches 'Foo'.
-
-vim.o.cursorline = true -- Highlight the line where the cursor is on.
-
-vim.o.scrolloff = 10 -- Keep a minimal number of screen lines (10) above and below the cursor.
--- Prevents the cursor from sticking to the very top or bottom of the screen.
-
-vim.o.list = true -- Show special characters like tabs (`^I`) and trailing spaces (`$`).
--- Helpful for maintaining clean code.
-
-vim.o.confirm = true -- If performing an operation that would fail due to unsaved changes (like `:q`),
--- instead raise a dialog asking if you wish to save the current file(s).
-
-vim.o.undofile = true -- Enable persistent undo. Your undo history is saved across sessions.
-vim.o.undodir = vim.fn.stdpath("data") .. "/undodir" -- Specify the directory for persistent undo files.
--- `vim.fn.stdpath("data")` is cross-platform.
-
-vim.opt.splitright = true -- Open new vertical splits to the right of the current window.
-vim.opt.splitbelow = true -- Open new horizontal splits below the current window.
-
--- Folding for text/code blocks based on indentation.
--- Use Treesitter's intelligence to handle code folding
+-- ==========================================================================
+-- [[ NATIVE AST-DRIVEN CODE FOLDING ]]
+-- ==========================================================================
+-- Leverage Neovim's integrated core Tree-sitter intelligence for code scopes
 vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()" -- Calculate boundaries via core AST
+vim.opt.foldlevel = 99 -- Ensure all blocks start completely expanded by default
+vim.opt.foldlevelstart = 99 -- Retain standard expanded focus on fresh files
 
--- This tells Neovim to use the built-in Treesitter engine (new in 0.12!)
--- to decide where a function or a block of code begins and ends.
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+-- ==========================================================================
+-- [[ AUTOMATION HOOKS & EVENT ACTIONS ]]
+-- ==========================================================================
 
--- '99' effectively means "open everything by default."
--- Without this, Neovim might hide all your code the moment you open a file.
-vim.opt.foldlevel = 99
-
--- This ensures that even when you search for text,
--- Neovim will automatically open a fold if the result is inside it.
-vim.opt.foldlevelstart = 99
-
--- Create the undo directory if it does not exist.
+-- Enforce Runtime Undo Trees Path Verification
 local undodir = vim.o.undodir
 if not vim.fn.isdirectory(undodir) then
 	vim.fn.mkdir(undodir, "p")
 end
 
--- Sync clipboard between OS and Neovim.
--- This sets `clipboard='unnamedplus'` which makes Neovim use the system clipboard for yanking/pasting.
--- We schedule it to run after `UIEnter` to potentially improve startup time.
--- Remove this if you want your OS clipboard to remain independent.
--- See `:help 'clipboard'`
+-- Synchronized System Clipboard Handling
 vim.api.nvim_create_autocmd("UIEnter", {
+	desc = "Deferred system clipboard alignment to accelerate early startup",
 	callback = function()
-		vim.o.clipboard = "unnamedplus"
+		vim.o.clipboard = "unnamedplus" -- Connect your standard yanks directly to global memory space
 	end,
 })
 
--- Open neo-tree automatically when Neovim starts without a specific file
+-- Automated File Explorer Hook
 vim.api.nvim_create_autocmd("VimEnter", {
+	group = vim.api.nvim_create_augroup("NeoTreeAutoOpen", { clear = true }),
+	desc = "Auto-launch Neo-tree workspace tree on empty initial window boots",
 	callback = function()
-		-- Check if no files were opened and if the current buffer is empty
 		if #vim.api.nvim_list_bufs() == 1 and vim.bo.buftype == "" and vim.fn.argv(0) == nil then
 			vim.cmd("Neotree")
 		end
 	end,
-	group = vim.api.nvim_create_augroup("NeoTreeAutoOpen", { clear = true }),
-	desc = "Open NeoTree on startup if no file is specified",
 })
 
--- [[ Basic Autocommands ]]
--- Autocommands automatically execute commands when certain events occur (e.g., opening a file).
--- See `:h lua-guide-autocommands`, `:h autocmd`, `:h nvim_create_autocmd()`.
-
--- Highlight when yanking (copying) text.
--- When you yank text (`y`), it briefly highlights the yanked text.
--- Try it with `yap` (yank a paragraph) in Normal mode. See `:h vim.hl.on_yank()`.
+-- Visual Copy Confirmation Flash
 vim.api.nvim_create_autocmd("TextYankPost", {
-	desc = "Highlight when yanking (copying) text",
+	desc = "Highlight text boundaries briefly upon performing a copy action",
 	callback = function()
-		vim.highlight.on_yank() -- Changed from vim.hl.on_yank() to vim.highlight.on_yank() for consistency with modern APIs
+		vim.highlight.on_yank() -- Modern, consistent core highlight executor
 	end,
 })
 
--- [[ Create user commands ]]
--- User commands are custom commands you can define and execute with `:CommandName`.
--- See `:h nvim_create_user_command()` and `:h user-commands`.
+-- ==========================================================================
+-- [[ CUSTOM OPERATIONAL COMMANDS ]]
+-- ==========================================================================
 
--- Create a command `:GitBlameLine` that prints the git blame for the current line.
+-- Git Triage Commands
 vim.api.nvim_create_user_command("GitBlameLine", function()
-	local line_number = vim.fn.line(".") -- Get the current line number. See `:h line()`.
-	local filename = vim.api.nvim_buf_get_name(0) -- Get the current buffer's file path.
+	local line_number = vim.fn.line(".")
+	local filename = vim.api.nvim_buf_get_name(0)
 	print(vim.fn.system({ "git", "blame", "-L", line_number .. ",+1", filename }))
-end, { desc = "Print the git blame for the current line" })
+end, { desc = "Extract git blame tracking logs for the active target line" })
 
--- Neovim diagnostic config
+-- ==========================================================================
+-- [[ DIAGNOSTIC METERING & LSP UI APPEARANCE ]]
+-- ==========================================================================
 local diagnostic_signs = {
 	Error = " ",
 	Warn = " ",
@@ -160,6 +142,7 @@ vim.diagnostic.config({
 	},
 })
 
+-- Modernized Floating Rounded Windows Interceptor
 do
 	local orig = vim.lsp.util.open_floating_preview
 	function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
@@ -168,31 +151,25 @@ do
 		return orig(contents, syntax, opts, ...)
 	end
 end
--- [[ Plugin Manager Setup: lazy.nvim ]]
--- This section installs and configures the `lazy.nvim` plugin manager itself.
--- This block MUST be at the very top of your plugin definitions.
+
+-- ==========================================================================
+-- [[ PLUGIN DECLARATIONS & PACKAGE ADDITIONS ]]
+-- ==========================================================================
+
+-- Bootstrap/execute your centralized lazy package ecosystem specifications
 require("config.lazy")
 
--- [[ Add optional packages ]]
--- Nvim comes bundled with a set of packages that are not enabled by
--- default. You can enable any of them by using the `:packadd` command.
--- These are typically added at the end of the config.
-
--- For example, to add the "nohlsearch" package to automatically turn off search highlighting after
--- 'updatetime' and when going to insert mode
-vim.cmd("packadd! nohlsearch")
--- vim.cmd('source ~/.config/nvim/db_connections.vim')
+-- Inject bundled core runtime plugins directly into the runtime loop
+vim.cmd("packadd! nohlsearch") -- Automated search match styling suspension when typing starts
 
 -- ==========================================================================
--- [NEW] NATIVE CORE TREESITTER HIGHLIGHTING (No Plugins Required)
+-- [[ NATIVE CORE TREESITTER SYSTEM HIGH-LIGHT LOOP ]]
 -- ==========================================================================
-
--- Create an autocommand loop that tracks whenever a file buffer is loaded
 vim.api.nvim_create_autocmd("FileType", {
-	desc = "Automatically activate native Tree-sitter syntax highlighting",
+	desc = "Instantly trigger core native AST compiler parsers on valid documents",
 	callback = function()
-		-- Safely start Neovim's native core tree-sitter highlighter.
-		-- pcall prevents errors if Neovim opens a strange or unsupported format.
+		-- Triggers Neovim's pre-compiled fast internal parser engine.
+		-- Safely wraps fallback protocols without logging crash popups.
 		pcall(vim.treesitter.start)
 	end,
 })
