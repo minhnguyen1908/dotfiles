@@ -182,3 +182,17 @@ require("config.lazy")
 -- 'updatetime' and when going to insert mode
 vim.cmd("packadd! nohlsearch")
 -- vim.cmd('source ~/.config/nvim/db_connections.vim')
+
+-- ==========================================================================
+-- [NEW] NATIVE CORE TREESITTER HIGHLIGHTING (No Plugins Required)
+-- ==========================================================================
+
+-- Create an autocommand loop that tracks whenever a file buffer is loaded
+vim.api.nvim_create_autocmd("FileType", {
+	desc = "Automatically activate native Tree-sitter syntax highlighting",
+	callback = function()
+		-- Safely start Neovim's native core tree-sitter highlighter.
+		-- pcall prevents errors if Neovim opens a strange or unsupported format.
+		pcall(vim.treesitter.start)
+	end,
+})
