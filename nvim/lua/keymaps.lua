@@ -126,6 +126,30 @@ map("n", "<leader>ds", function()
 	require("dap.ui.widgets").centered_float(require("dap.ui.widgets").scopes)
 end, { desc = "Dap: Show Scopes" })
 
+-- ============================================================================
+-- NEW: Buffer-Local LSP Mappings for Markdown Navigation
+-- ============================================================================
+
+-- Creates an autocommand group to safely manage markdown-specific keymaps
+local markdown_maps = vim.api.nvim_create_augroup("MarkdownKeymaps", { clear = true })
+
+-- Listens for the 'FileType' event specifically when a markdown buffer triggers
+vim.api.nvim_create_autocmd("FileType", {
+	-- Specifies the target language profile layout
+	pattern = "markdown",
+	-- Assigns the execution group created above
+	group = markdown_maps,
+	-- The callback function running immediately when the file type matches
+	callback = function()
+		-- Maps 'gd' locally ONLY within the active markdown buffer
+		-- Triggers the standard LSP definition provider to jump across file anchors
+		vim.keymap.set("n", "gd", vim.lsp.buf.definition, {
+			buffer = true, -- RESTRICTS this mapping strictly to markdown files
+			desc = "Markdown: Jump to cross-file anchor definition",
+		})
+	end,
+})
+
 -- =============================================================================
 -- [[ SECTION 3: BUFFER INTERCEPT LSP HOOKS ]]
 -- =============================================================================
