@@ -127,31 +127,41 @@ map("n", "<leader>ds", function()
 end, { desc = "Dap: Show Scopes" })
 
 -- ============================================================================
--- NEW: Buffer-Local LSP Mappings for Markdown Navigation
+-- SECTION 3: BUFFER-LOCAL NATIVE LSP INITIALIZATION FOR PURE MARKDOWN NAVIGATION
 -- ============================================================================
 
--- Creates an autocommand group to safely manage markdown-specific keymaps
+-- Creates an isolated autocommand execution ring group for markdown configurations
 local markdown_maps = vim.api.nvim_create_augroup("MarkdownKeymaps", { clear = true })
 
--- Listens for the 'FileType' event specifically when a markdown buffer triggers
+-- Attaches a listener that fires immediately when any markdown buffer renders inside Neovim
 vim.api.nvim_create_autocmd("FileType", {
-	-- Specifies the target language profile layout
-	pattern = "markdown",
-	-- Assigns the execution group created above
-	group = markdown_maps,
-	-- The callback function running immediately when the file type matches
-	callback = function()
-		-- Maps 'gd' locally ONLY within the active markdown buffer
-		-- Triggers the standard LSP definition provider to jump across file anchors
-		vim.keymap.set("n", "gd", vim.lsp.buf.definition, {
-			buffer = true, -- RESTRICTS this mapping strictly to markdown files
-			desc = "Markdown: Jump to cross-file anchor definition",
+	pattern = "markdown", -- Filters context specifically for Markdown documents
+	group = markdown_maps, -- Allocates execution to the isolated group above
+	callback = function(ev) -- Captures the active event payload including buffer references
+		-- NEW: Spawns the marksman LSP client natively using Neovim core APIs
+		-- This completely bypasses deprecated nvim-lspconfig v3.0.0 framework lifecycles
+		vim.lsp.start({
+			name = "marksman",
+			cmd = { "marksman", "server" },
+			-- Dynamically discovers workspace boundaries using your root anchor files
+			root_dir = vim.fs.root(ev.buf, { ".git", ".marksman.toml", ".marksman.root" }),
+			settings = {
+				marksman = {
+					prefer_relative_paths = true,
+				},
+			},
+		})
+
+		-- Sets a buffer-local shortcut for Go to Definition over markdown anchor targets
+		map("n", "gd", vim.lsp.buf.definition, {
+			buffer = ev.buf,
+			desc = "Markdown: Jump to cross-file anchor title directly",
 		})
 	end,
 })
 
 -- =============================================================================
--- [[ SECTION 3: BUFFER INTERCEPT LSP HOOKS ]]
+-- [[ SECTION 4: BUFFER INTERCEPT LSP HOOKS ]]
 -- =============================================================================
 return function(client, bufnr)
 	local lsp_map = function(mode, lhs, rhs, opts)
