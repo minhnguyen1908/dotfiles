@@ -157,6 +157,25 @@ vim.api.nvim_create_autocmd("FileType", {
 			buffer = ev.buf,
 			desc = "Markdown: Jump to cross-file anchor title directly",
 		})
+
+		-- NEW: Buffer-local shortcut to parse the active text row for standard web URLs and execute opening pipelines
+		map("n", "gx", function()
+			-- Captures the entire content string of the active cursor line
+			local line = vim.fn.getline(".")
+			-- Executes a regex match sequence to catch traditional web hyper-references within markdown brackets
+			local url = vim.fn.matchstr(line, [=[https\?://[^)]*]=])
+			-- Validates if a true remote URI string vector was correctly isolated
+			if url ~= "" then
+				-- Dispatches the string natively to the operating system's browser wrapper layer
+				vim.ui.open(url)
+			else
+				-- Falls back onto standard core cfile extraction if no strict markdown URL matches
+				vim.ui.open(vim.fn.expand("<cfile>"))
+			end
+		end, {
+			buffer = ev.buf, -- Locks execution safely within the active text layout frame
+			desc = "Markdown: Scan line for external web link and open in browser", -- Documents tracking target
+		})
 	end,
 })
 
