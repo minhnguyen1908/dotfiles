@@ -1,5 +1,7 @@
 use std *
 
+plugin use query
+
 use scripts/chech_g3sb_log.nu *
 
 const carapace_cache = ($nu.cache-dir | path join "carapace.nu")
@@ -31,7 +33,8 @@ $env.config = {
 zoxide init nushell | save -f ($nu.default-config-dir | path join "zoxide.nu")
 source ($nu.default-config-dir | path join "zoxide.nu")
 
-atuin init nu | save -f ($nu.default-config-dir | path join "atuin.nu")
-source ($nu.default-config-dir | path join "atuin.nu")
+# atuin init nu | save -f ($nu.default-config-dir | path join "atuin.nu")
+# source ($nu.default-config-dir | path join "atuin.nu")
+source atuin.nu
 
 alias nerdctl = lima nerdctl
